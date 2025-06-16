@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Store</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 10px; }
+    select { width: 100%; font-size: 16px; padding: 8px; }
+  </style>
+</head>
+<body>
+  <label for="store">Select Store:</label>
+  <select id="store">
+    <option value="">-- Loading stores... --</option>
+  </select>
+
+  <script>
+    // Replace with your actual Sheet.best endpoint below
+    const endpoint = "https://api.sheetbest.com/sheets/f3dc602d-384f-47e5-b431-bbd76f6ac2d6";
+
+    async function loadStores() {
+      try {
+        const res = await fetch(endpoint);
+        const data = await res.json();
+        const select = document.getElementById("store");
+        select.innerHTML = '<option value="">-- Select a store --</option>';
+
+        const names = Array.from(new Set(data.map(r => r["New Shop/Store Registration Form"])))
+          .filter(n => n);
+
+        names.sort().forEach(name => {
+          const opt = document.createElement("option");
+          opt.value = name;
+          opt.textContent = name;
+          select.appendChild(opt);
+        });
+      } catch (e) {
+        console.error(e);
+        document.getElementById("store").innerHTML = '<option>Unable to load</option>';
+      }
+    }
+
+    loadStores();
+  </script>
+</body>
+</html>
