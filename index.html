@@ -7,37 +7,56 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 10px;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
       text-align: center;
     }
     label {
       font-weight: bold;
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
     select {
       width: 100%;
-      max-width: 400px;
       padding: 10px;
       font-size: 16px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
-  <label for="store">Select Store:</label>
+  <label for="store">Select Store to Place Order:</label>
   <select id="store">
     <option value="">-- Loading stores... --</option>
   </select>
 
+  <button id="submitBtn" disabled>Place Order</button>
+
   <script>
     const endpoint = "https://api.sheetbest.com/sheets/f3dc602d-384f-47e5-b431-bbd76f6ac2d6";
-    const formUrlBase = "https://form.jotform.com/251502168126450?q57_selectedShop=";
+    const formBaseUrl = "https://form.jotform.com/251502168126450?q57_selectedShop=";
 
     async function loadStores() {
       try {
         const res = await fetch(endpoint);
         const data = await res.json();
         const select = document.getElementById("store");
+        const button = document.getElementById("submitBtn");
 
         select.innerHTML = '<option value="">-- Select a store --</option>';
 
@@ -52,11 +71,14 @@
           select.appendChild(option);
         });
 
-        // Redirect to form with selected value
         select.addEventListener("change", function () {
-          const selectedStore = this.value;
+          button.disabled = !this.value;
+        });
+
+        button.addEventListener("click", function () {
+          const selectedStore = select.value;
           if (selectedStore) {
-            window.location.href = formUrlBase + encodeURIComponent(selectedStore);
+            window.location.href = formBaseUrl + encodeURIComponent(selectedStore);
           }
         });
 
