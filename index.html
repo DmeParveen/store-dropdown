@@ -60,7 +60,7 @@
 
         select.innerHTML = '<option value="">-- Select a store --</option>';
 
-        const names = Array.from(new Set(data.map(row => row["Shop Name"])))
+        const names = Array.from(new Set(data.map(row => row["Store Name"])))
           .filter(name => name && name.trim().length > 0)
           .sort();
 
