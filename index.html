@@ -14,7 +14,24 @@
   <select id="store">
     <option value="">-- Loading stores... --</option>
   </select>
+  
+<script>
+  document.getElementById("store").addEventListener("change", function () {
+    const selectedValue = this.value;
 
+    // Send to parent (Jotform) via postMessage
+    if (window.parent) {
+      window.parent.postMessage(
+        {
+          type: "store-selection",
+          value: selectedValue,
+        },
+        "*"
+      );
+    }
+  });
+</script>
+  
   <script>
     // Replace with your actual Sheet.best endpoint below
     const endpoint = "https://api.sheetbest.com/sheets/f3dc602d-384f-47e5-b431-bbd76f6ac2d6";
